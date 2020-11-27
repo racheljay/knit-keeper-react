@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { axiosHelper } from './utilities/axiosHelper';
 import axios from 'axios';
 
 
 function Register() {
-
+    
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const data = { name, email, password };
-    const headers = {
-        'Content_Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*'
+    const [accessToken, setAccessToken] = useState('')
+    
+    
+    const submit = (res) => {
+        if(res.status === 200) {
+            console.log(res)
+            // console.log(res.data.message, res.data.data.token)
+            setAccessToken(res.data.data.token);
+            sessionStorage.setItem('token', accessToken)
+        }
     }
-    const method = 'post';
-    const url = '/register';
+    
+    const handleClick = () => {
+        const data = { name, email, password };
+        
+        const method = 'post';
+        const url = '/register';
+        axiosHelper(method, url, submit, data)
+}
 
 
     return (
@@ -69,7 +80,7 @@ function Register() {
                     <button
                         type="submit"
                         className="btn btn-danger"
-                        onClick={() => axiosHelper(method, data, url, headers)}
+                        onClick={() => handleClick()}
                     >Create Account</button>
                 </div>
             </div>

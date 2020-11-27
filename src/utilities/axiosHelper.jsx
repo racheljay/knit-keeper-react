@@ -5,7 +5,8 @@ export function axiosHelper(method, url, func, data ={}) {
     const API_URL = 'http://localhost:8000'
     const headers = {
         'Content_Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
+        'Access': 'application/json'
     }
 
     

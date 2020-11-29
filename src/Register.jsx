@@ -1,10 +1,11 @@
 import React, { useState, useEffect} from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
 import { axiosHelper } from './utilities/axiosHelper';
 import axios from 'axios';
 
 
 function Register() {
+    let history = useHistory();
     
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -17,7 +18,8 @@ function Register() {
             console.log(res)
             // console.log(res.data.message, res.data.data.token)
             setAccessToken(res.data.data.token);
-            sessionStorage.setItem('token', accessToken)
+            sessionStorage.setItem('token', res.data.data.token)
+            history.push('/dashboard');
         }
     }
     

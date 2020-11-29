@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
 import { axiosHelper } from './utilities/axiosHelper';
 
 
@@ -9,13 +9,15 @@ function Login() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	// const [accessToken, setAccessToken] = useState('')
+	let history = useHistory();
 
-
+//submit method used in axios call
 	const submit = (res) => {
 		if (res.status === 200) {
 			console.log(res)
 			// console.log(res.data.message, res.data.data.token)
 			sessionStorage.setItem('token', res.data.access_token)
+			history.push('/dashboard')
 		}
 	}
 	
@@ -32,7 +34,6 @@ function Login() {
 		const method = 'post';
 		const url = '/v1/oauth/token';
 		axiosHelper(method, url, submit, data)
-		
 	}
 
 	return (

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Nav from './Nav';
 import Register from './Register';
 import Login from './Login';
+import Dashboard from './Dashboard';
 
 function App() {
   return (
@@ -16,9 +17,13 @@ function App() {
 
         <Route path="/register">
         <Register />
+        </Route> 
+
+        <Route path="/dashboard">
+        <Dashboard />
         </Route>
         
-      </Router>
+       </Router>
     </div>
   );
 }

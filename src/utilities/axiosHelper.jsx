@@ -21,7 +21,10 @@ export function axiosHelper(method, url, func, data ={}) {
     ).then(res => {
          func(res)
         
-    }).catch(e => console.log(e))
+    }).catch(e => {
+        console.log(e)
+        
+    })
 }
 
 // export default axiosHelper;

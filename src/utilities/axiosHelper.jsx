@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export function axiosHelper(method, url, func, data ={}) {
+export function axiosHelper(method, url, func, data={}, headers={}) {
     const API_URL = 'http://localhost:8000'
-    const headers = {
-        'Content_Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*',
-        'Access': 'application/json'
-    }
+
 
     
     return axios(

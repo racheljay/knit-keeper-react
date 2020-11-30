@@ -1,21 +1,25 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
 import { axiosHelper } from './utilities/axiosHelper';
 
 
 
-function Login() {
+function Login(props) {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	// const [accessToken, setAccessToken] = useState('')
+
 	let history = useHistory();
 
+	useEffect(() => {
+		console.log('did mount', props.loginState)
+	}, [])
 //submit method used in axios call
 	const submit = (res) => {
 		if (res.status === 200) {
 			console.log(res)
 			// console.log(res.data.message, res.data.data.token)
+			props.setAccessToken(res.data.access_token);
 			sessionStorage.setItem('token', res.data.access_token)
 			history.push('/dashboard')
 		}
@@ -30,10 +34,18 @@ function Login() {
 			grant_type: 'password',
 			scope: ''
 		};
+
+		const headers = {
+            'Content_Type': 'application/json;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+            'Access': 'application/json',
+        }
 		
 		const method = 'post';
 		const url = '/v1/oauth/token';
 		axiosHelper(method, url, submit, data)
+		props.setLoginState(true);
+		console.log('after axios', props.loginState);
 	}
 
 	return (

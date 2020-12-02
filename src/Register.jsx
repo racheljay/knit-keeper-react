@@ -1,20 +1,20 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
-import { axiosHelper } from './utilities/axiosHelper';
+import axiosHelper from './utilities/axiosHelper';
 import axios from 'axios';
 
 
 function Register(props) {
     let history = useHistory();
-    
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     // const [accessToken, setAccessToken] = useState('')
-    
-    
+
+
     const submit = (res) => {
-        if(res.status === 200) {
+        if (res.status === 200) {
             console.log(res)
             // console.log(res.data.message, res.data.data.token)
             props.setAccessToken(res.data.data.token);
@@ -22,24 +22,22 @@ function Register(props) {
             history.push('/dashboard');
         }
     }
-    
+
     const handleClick = () => {
         const data = { name, email, password };
-        
+
         const headers = {
             'Content_Type': 'application/json;charset=UTF-8',
             'Access-Control-Allow-Origin': '*',
             'Access': 'application/json',
-            // 'Accept': 'application/json',
-            // 'Authorization': `Bearer ${accessToken}`
         }
 
         const method = 'post';
         const url = '/register';
-        axiosHelper(method, url, submit, data, headers)
+        axiosHelper({ method, url, func: submit, data, headers })
         props.setLoginState(true);
         console.log(props.loginState)
-}
+    }
 
 
     return (

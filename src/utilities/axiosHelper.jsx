@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
 import axios from 'axios';
 
-export function axiosHelper(method, url, func, data={}, headers={}) {
+function axiosHelper({method, url, func, data={}, headers={}}) {
     const API_URL = 'http://localhost:8000'
 
 
@@ -23,4 +22,4 @@ export function axiosHelper(method, url, func, data={}, headers={}) {
     })
 }
 
-// export default axiosHelper;
+export default axiosHelper;

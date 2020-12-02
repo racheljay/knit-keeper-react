@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
-import { axiosHelper } from './utilities/axiosHelper';
+import  axiosHelper  from './utilities/axiosHelper';
 
 
 
@@ -29,21 +29,22 @@ function Login(props) {
 		const data = {
 			username: email,
 			password,
-			client_secret: "J0DOlVzrDoxH7tVY0sAXqEWYz2vxEc81psNVxEVe",
+			client_secret: "Kv6f6QU9gHZEk6SDz0N15jdtIjylLGB2KPgRvfY1",
 			client_id: '2',
 			grant_type: 'password',
 			scope: ''
 		};
 
-		const headers = {
-            'Content_Type': 'application/json;charset=UTF-8',
-            'Access-Control-Allow-Origin': '*',
-            'Access': 'application/json',
-        }
+		// const headers = {
+        //     'Content_Type': 'application/json;charset=UTF-8',
+        //     'Access-Control-Allow-Origin': '*',
+        //     'Access': 'application/json',
+        // }
 		
 		const method = 'post';
 		const url = '/v1/oauth/token';
-		axiosHelper(method, url, submit, data)
+		axiosHelper({method, url, func: submit, data})
+		//check if bearer token is in session storage if it it, then set
 		props.setLoginState(true);
 		console.log('after axios', props.loginState);
 	}

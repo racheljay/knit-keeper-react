@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Nav from './Nav';
 import Register from './Register';
@@ -8,6 +8,14 @@ import Dashboard from './Dashboard';
 function App() {
   const [loginState, setLoginState] = useState(false)
   const [accessToken, setAccessToken] = useState('')
+
+  useEffect(() => {
+    const token = window.sessionStorage.getItem('token')
+    if (token) {
+      setAccessToken(token);
+      setLoginState(true);
+    }
+  }, [])
 
   return (
     <div>

@@ -5,14 +5,13 @@ import axiosHelper from './utilities/axiosHelper';
 function Dashboard(props) {
   const history = useHistory();
 
-  const [userName, setUserName] = useState('');
-  const [userID, setUserID] = useState(0);
+
   const [projectData, setProjectData] = useState([]);
 
   const getUserInfo = (res) => {
     console.log(res)
-    setUserName(res.data.name);
-    setUserID(res.data.id);
+    props.setUserName(res.data.name);
+    props.setUserID(res.data.id);
 
     console.log(res.data.id);
     const url = `/projects/${res.data.id}`;
@@ -49,22 +48,30 @@ function Dashboard(props) {
     history.push('/');
     props.setLoginState(false);
     console.log(props.loginState);
-    setUserName('');
-    setUserID(0);
+    props.setUserName('');
+    props.setUserID(0);
   }
+
+  const addProject = () => {
+    history.push('/add-project')
+  }
+
   if (props.loginState === true) {
 
     return (
       <div className="container">
 
         <h1>Dashboard</h1>
-        <h2>Welcome, {userName}!</h2>
+        <h2>Welcome, {props.userName}!</h2>
 
         <button
           className="btn btn-success"
           onClick={logOut}
         >Log Out</button>
-  
+        <button
+          className="btn btn-light"
+          onClick={addProject}
+        >Add New</button>
         <br />
 
 
@@ -72,34 +79,34 @@ function Dashboard(props) {
         {
           projectData.length > 0 ?
 
-            
-              projectData.map((item, index) => {
-                return (
-                  <div className="btn-group">
-                    <button type="button" className="btn btn-secondary">{item.project_name}</button>
-                    <button type="button" className="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-                      <span className="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                      <a className="dropdown-item" href="#">Action</a>
-                      <a className="dropdown-item" href="#">Another action</a>
-                      <a className="dropdown-item" href="#">Something else here</a>
-                      <div className="dropdown-divider"></div>
-                      <a className="dropdown-item" href="#">Separated link</a>
-                    </div>
+
+            projectData.map((item, index) => {
+              return (
+                <div className="btn-group">
+                  <button type="button" className="btn btn-secondary">{item.project_name}</button>
+                  <button type="button" className="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+                    <span className="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div className="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                    <a className="dropdown-item" href="#">Action</a>
+                    <a className="dropdown-item" href="#">Another action</a>
+                    <a className="dropdown-item" href="#">Something else here</a>
+                    <div className="dropdown-divider"></div>
+                    <a className="dropdown-item" href="#">Separated link</a>
                   </div>
-                )
-              })
-            
+                </div>
+              )
+            })
+
             : <div>No projects yet!</div>
         }
 
       </div>
     )
   } else {
-    return(
-      <h1>You're not supposed to be here</h1>
-    )
+    // return(
+    //   <h1>You're not supposed to be here</h1>
+    // )
   }
 }
 

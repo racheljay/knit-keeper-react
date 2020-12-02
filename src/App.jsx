@@ -4,10 +4,13 @@ import Nav from './Nav';
 import Register from './Register';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import AddProject from './AddProject';
 
 function App() {
   const [loginState, setLoginState] = useState(false)
   const [accessToken, setAccessToken] = useState('')
+  const [userName, setUserName] = useState('');
+  const [userID, setUserID] = useState(0);
 
   useEffect(() => {
     const token = window.sessionStorage.getItem('token')
@@ -46,6 +49,21 @@ function App() {
             loginState={loginState}
             accessToken={accessToken}
             setAccessToken={setAccessToken}
+            userName={userName}
+            setUserName={setUserName}
+            userID={userID}
+            setUserID={setUserID}
+          />
+        </Route>
+
+        <Route path="/add-project">
+          <AddProject
+            setLoginState={setLoginState}
+            loginState={loginState}
+            accessToken={accessToken}
+            setAccessToken={setAccessToken}
+            userID={userID}
+            setUserID={setUserID}
           />
         </Route>
 

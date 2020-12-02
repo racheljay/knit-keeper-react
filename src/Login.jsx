@@ -29,7 +29,7 @@ function Login(props) {
 		const data = {
 			username: email,
 			password,
-			client_secret: "Kv6f6QU9gHZEk6SDz0N15jdtIjylLGB2KPgRvfY1",
+			client_secret: "qYyAlARTszlp3aQBCZer9Pi3nWvYhcrz97Tq1Lr2",
 			client_id: '2',
 			grant_type: 'password',
 			scope: ''

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
 
@@ -11,9 +11,15 @@ function AddProject(props) {
 	const [needleSize, setNeedleSize] = useState(0);
 	const [yarn, setYarn] = useState('');
 
+
+
+
 	const submit = (res) => {
-		if(res.status === 200) {
-			console.log(res)
+		// console.log('in submit', resStatus)
+		if (res.status === 200) {
+			props.setResStatus(res.status)
+			console.log('add project', res)
+			// alert('Project added')
 		}
 	}
 
@@ -24,84 +30,90 @@ function AddProject(props) {
 			pattern_name: patternName,
 			pattern_url: patternUrl,
 			needle_size: needleSize,
-			yarn};
+			yarn
+		};
 
 		const headers = {
 			'Content_Type': 'application/json;charset=UTF-8',
 			'Access-Control-Allow-Origin': '*',
 			'Access': 'application/json',
-	}
+		}
 
-	const method = 'post';
-	const url = `/add-project`;
-	axiosHelper({ method, url, func: submit, data, headers })
+		const method = 'post';
+		const url = `/add-project`;
+		axiosHelper({ method, url, func: submit, data, headers })
 	}
 
 	return (
 		<div className="container">
 			<h1>Create Project</h1>
 
+			{props.resStatus === 200 &&
+				<Success />
+			}
+
+
 
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Project Name</label>
 				<input
-				type="text"
-				className="form-control"
-				// id="exampleFormControlInput1"
-				placeholder="Name"
-				onChange={e => setProjectName(e.target.value)}
+					type="text"
+					className="form-control"
+					// id="exampleFormControlInput1"
+					placeholder="Name"
+					onChange={e => setProjectName(e.target.value)}
 				/>
 			</div>
 
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Pattern Name</label>
 				<input
-				type="text"
-				className="form-control"
-				// id="exampleFormControlInput1"
-				placeholder="Name"
-				onChange={e => setPatternName(e.target.value)}
+					type="text"
+					className="form-control"
+					// id="exampleFormControlInput1"
+					placeholder="Name"
+					onChange={e => setPatternName(e.target.value)}
 				/>
 			</div>
 
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Pattern Url</label>
 				<input
-				type="text"
-				className="form-control"
-				// id="exampleFormControlInput1"
-				placeholder="http://www.example.com"
-				onChange={e => setPatternUrl(e.target.value)}
+					type="text"
+					className="form-control"
+					// id="exampleFormControlInput1"
+					placeholder="http://www.example.com"
+					onChange={e => setPatternUrl(e.target.value)}
 				/>
 			</div>
 
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Needle Size</label>
 				<input
-				type="text"
-				className="form-control"
-				id="exampleFormControlInput1"
-				placeholder="0"
-				onChange={e => setNeedleSize(e.target.value)}
+					type="text"
+					className="form-control"
+					id="exampleFormControlInput1"
+					placeholder="0"
+					onChange={e => setNeedleSize(e.target.value)}
 				/>
 			</div>
 
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Yarn</label>
 				<input
-				type="text"
-				className="form-control"
-				id="exampleFormControlInput1"
-				placeholder="Worsted"
-				onChange={e => setYarn(e.target.value)}
+					type="text"
+					className="form-control"
+					id="exampleFormControlInput1"
+					placeholder="Worsted"
+					onChange={e => setYarn(e.target.value)}
 				/>
 			</div>
-		
-		<button
-		className="btn btn-danger"
-		onClick={handleClick}
-		>Submit</button>
-		<Link to="/dashboard">Back to Dash</Link>
+
+			<button
+				className="btn btn-danger"
+				onClick={handleClick}
+			>Submit</button>
+			<Link to="/dashboard">Back to Dash</Link>
 
 			{/* <div class="form-group">
 				<label for="exampleFormControlTextarea1">Example textarea</label>
@@ -114,3 +126,19 @@ function AddProject(props) {
 }
 
 export default AddProject;
+
+function Success() {
+	return (
+		<div class="alert alert-success" role="alert">
+			Project Created Successfully!
+		</div>
+	)
+}
+
+function Failure() {
+	return (
+		<div class="alert alert-danger" role="alert">
+			Needle Size must be a number
+		</div>
+	)
+}

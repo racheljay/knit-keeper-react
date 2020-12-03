@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-function axiosHelper({method, url, func, data={}, headers={}}) {
+function axiosHelper({method, url, func=(res) => console.log(res), data={}, headers={}}) {
     const API_URL = 'http://localhost:8000'
 
 
@@ -18,7 +18,7 @@ function axiosHelper({method, url, func, data={}, headers={}}) {
         
     }).catch(e => {
         console.log(e)
-        
+        alert('Error', e)
     })
 }
 

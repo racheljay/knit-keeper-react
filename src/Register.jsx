@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
-import axios from 'axios';
 
 
 function Register(props) {

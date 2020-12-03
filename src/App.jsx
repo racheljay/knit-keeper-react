@@ -11,6 +11,7 @@ function App() {
   const [accessToken, setAccessToken] = useState('')
   const [userName, setUserName] = useState('');
   const [userID, setUserID] = useState(0);
+  const [resStatus, setResStatus] = useState(0);
 
   useEffect(() => {
     const token = window.sessionStorage.getItem('token')
@@ -64,6 +65,8 @@ function App() {
             setAccessToken={setAccessToken}
             userID={userID}
             setUserID={setUserID}
+            resStatus={resStatus}
+            setResStatus={setResStatus}
           />
         </Route>
 

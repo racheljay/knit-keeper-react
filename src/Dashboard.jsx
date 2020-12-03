@@ -17,13 +17,16 @@ function Dashboard(props) {
     const url = `/projects/${res.data.id}`;
     axiosHelper({ method: 'get', url, func: showProjects })
   }
+
   //did mount
   useEffect(() => {
     console.log('did mount', props.loginState)
     // console.log('bearer', props.accessToken)
     const headers = {
       'Accept': 'application/json',
-      'Authorization': `Bearer ${props.accessToken}`
+      'Authorization': `Bearer ${props.accessToken}`,
+      'Content_Type': 'application/json;charset=UTF-8',
+      'Access-Control-Allow-Origin': '*',
     }
     const method = 'get';
     const url = '/api/user';
@@ -36,11 +39,7 @@ function Dashboard(props) {
     console.log('project state', projectData)
   }
 
-  // useEffect(() => {
-  //     console.log(userID);
-  //     const url = `/projects/${userID}`;
-  //     axiosHelper({method: 'get', url, func: showProjects})      
-  // }, [userID])
+
 
   //try looking into revoking the token on the back end
   const logOut = () => {
@@ -56,6 +55,23 @@ function Dashboard(props) {
     history.push('/add-project')
   }
 
+  const deleteUser = () => {
+    console.log('delete', props.userID)
+    const method = "delete";
+    const url = '/delete-user';
+    const data = {
+      "id": JSON.stringify(props.userID)
+    }
+    const headers = {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${props.accessToken}`
+    }
+
+
+    axiosHelper({ method, url, data, headers });
+    logOut();
+  }
+
   if (props.loginState === true) {
 
     return (
@@ -68,6 +84,10 @@ function Dashboard(props) {
           className="btn btn-success"
           onClick={logOut}
         >Log Out</button>
+        <button
+        className="btn btn-danger"
+        onClick={deleteUser}
+        >Delete Account</button>
         <button
           className="btn btn-light"
           onClick={addProject}

@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
+import AppContext from './utilities/AppContext';
 
 function AddProject(props) {
 	let history = useHistory();
+
+const {
+	loginState, setLoginState,
+	accessToken, setAccessToken,
+	userID, setUserID,
+	res, setRes
+} = useContext(AppContext);
 
 	const [projectName, setProjectName] = useState('');
 	const [patternName, setPatternName] = useState('');
@@ -14,18 +22,28 @@ function AddProject(props) {
 
 
 
-	const submit = (res) => {
-		// console.log('in submit', resStatus)
+// console.log(props.res);
+
+	const success = (res) => {
+		console.log('in submit', res)
+		setRes(res)
 		if (res.status === 200) {
-			props.setResStatus(res.status)
 			console.log('add project', res)
-			// alert('Project added')
+			setTimeout(() => {
+				setRes({})
+				history.push('/dashboard')
+			}, 2000)
 		}
+	}
+
+	const failure = (e) => {
+		console.log(e)
+
 	}
 
 	const handleClick = () => {
 		const data = {
-			user_id: props.userID,
+			user_id: userID,
 			project_name: projectName,
 			pattern_name: patternName,
 			pattern_url: patternUrl,
@@ -41,15 +59,16 @@ function AddProject(props) {
 
 		const method = 'post';
 		const url = `/add-project`;
-		axiosHelper({ method, url, func: submit, data, headers })
+		axiosHelper({ method, url, sf: success, data, headers, })
 	}
 
 	return (
 		<div className="container">
 			<h1>Create Project</h1>
 
-			{props.resStatus === 200 &&
+			{res.status === 200 ?
 				<Success />
+				: <></>
 			}
 
 
@@ -59,7 +78,7 @@ function AddProject(props) {
 				<input
 					type="text"
 					className="form-control"
-					// id="exampleFormControlInput1"
+					
 					placeholder="Name"
 					onChange={e => setProjectName(e.target.value)}
 				/>
@@ -70,7 +89,7 @@ function AddProject(props) {
 				<input
 					type="text"
 					className="form-control"
-					// id="exampleFormControlInput1"
+					
 					placeholder="Name"
 					onChange={e => setPatternName(e.target.value)}
 				/>
@@ -79,9 +98,9 @@ function AddProject(props) {
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Pattern Url</label>
 				<input
-					type="text"
+					type="url"
 					className="form-control"
-					// id="exampleFormControlInput1"
+					
 					placeholder="http://www.example.com"
 					onChange={e => setPatternUrl(e.target.value)}
 				/>
@@ -90,9 +109,8 @@ function AddProject(props) {
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Needle Size</label>
 				<input
-					type="text"
+					type="number"
 					className="form-control"
-					id="exampleFormControlInput1"
 					placeholder="0"
 					onChange={e => setNeedleSize(e.target.value)}
 				/>
@@ -103,7 +121,6 @@ function AddProject(props) {
 				<input
 					type="text"
 					className="form-control"
-					id="exampleFormControlInput1"
 					placeholder="Worsted"
 					onChange={e => setYarn(e.target.value)}
 				/>
@@ -129,7 +146,7 @@ export default AddProject;
 
 function Success() {
 	return (
-		<div class="alert alert-success" role="alert">
+		<div className="alert alert-success" role="alert">
 			Project Created Successfully!
 		</div>
 	)
@@ -137,7 +154,7 @@ function Success() {
 
 function Failure() {
 	return (
-		<div class="alert alert-danger" role="alert">
+		<div className="alert alert-danger" role="alert">
 			Needle Size must be a number
 		</div>
 	)

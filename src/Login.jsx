@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
 import  axiosHelper  from './utilities/axiosHelper';
-
+import AppContext from './utilities/AppContext';
 
 
 function Login(props) {
@@ -11,15 +11,17 @@ function Login(props) {
 
 	let history = useHistory();
 
+	const { setLoginState,loginState, accessToken, setAccessToken } = useContext(AppContext);
+
 	useEffect(() => {
-		console.log('did mount', props.loginState)
+		console.log('did mount', loginState)
 	}, [])
 //submit method used in axios call
 	const submit = (res) => {
 		if (res.status === 200) {
 			console.log(res)
 			// console.log(res.data.message, res.data.data.token)
-			props.setAccessToken(res.data.access_token);
+			setAccessToken(res.data.access_token);
 			sessionStorage.setItem('token', res.data.access_token)
 			history.push('/dashboard')
 		}
@@ -29,7 +31,7 @@ function Login(props) {
 		const data = {
 			username: email,
 			password,
-			client_secret: "qYyAlARTszlp3aQBCZer9Pi3nWvYhcrz97Tq1Lr2",
+			client_secret: "3PV3uqDwO5iO50d58BS5xjtPuNV0Nj6sSrs7ZzSa",
 			client_id: '2',
 			grant_type: 'password',
 			scope: ''
@@ -43,10 +45,10 @@ function Login(props) {
 		
 		const method = 'post';
 		const url = '/v1/oauth/token';
-		axiosHelper({method, url, func: submit, data})
+		axiosHelper({method, url, sf: submit, data})
 		//check if bearer token is in session storage if it it, then set
-		props.setLoginState(true);
-		console.log('after axios', props.loginState);
+		setLoginState(true);
+		console.log('after axios', loginState);
 	}
 
 	return (

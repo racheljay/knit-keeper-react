@@ -1,24 +1,31 @@
 import axios from 'axios';
 
-function axiosHelper({method, url, func=(res) => console.log(res), data={}, headers={}}) {
+function axiosHelper({
+    method,
+    url,
+    data = {},
+    headers = {},
+    sf = res => console.log(res),
+    ff = e => console.log(e),
+
+}) {
     const API_URL = 'http://localhost:8000'
 
 
-    
+
     return axios(
         {
             method,
             url: API_URL + url,
             data,
-            // body,
             headers
-        } 
+        }
     ).then(res => {
-         func(res)
-        
+        sf(res)
+
     }).catch(e => {
-        console.log(e)
-        alert('Error', e)
+        ff(e)
+
     })
 }
 

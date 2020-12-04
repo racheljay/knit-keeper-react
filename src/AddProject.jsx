@@ -55,6 +55,7 @@ const {
 			'Content_Type': 'application/json;charset=UTF-8',
 			'Access-Control-Allow-Origin': '*',
 			'Access': 'application/json',
+			'Authorization': `Bearer ${accessToken}`,
 		}
 
 		const method = 'post';

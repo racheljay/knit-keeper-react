@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
+import {Alert} from 'reactstrap';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
@@ -30,6 +31,7 @@ function Register(props) {
     const fail = (e) => {
         console.log(e)
         setFailStatus(true)
+        // $('.alert-fail').alert()
     }
 
     const handleClick = () => {
@@ -54,9 +56,9 @@ function Register(props) {
         <div className="container">
             <h1>New Account:</h1>
 
-            {failStatus === true &&
-                <Failure />
-            }
+            {/* {failStatus && */}
+                <Failure failStatus={failStatus} setFailStatus={setFailStatus}/>
+            {/* } */}
 
             <div className="form-group row">
                 <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">User Name</label>
@@ -115,15 +117,27 @@ function Register(props) {
 
 export default Register;
 
-const Failure = () => {
-    const { setFailStatus } = useContext(AppContext);
+// const Failure = () => {
+//     const { setFailStatus } = useContext(AppContext);
 
+//     return (
+//         <div className="alert alert-danger alert-dismissible fade show alert-fail" role="alert">
+//             <strong>Oops!</strong> This email is taken, or invalid. Try again!
+//             <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={() => $('.alert-fail').alert('close')}>
+//                 <span aria-hidden="true">&times;</span>
+//             </button>
+//         </div>
+//     )
+// }
+
+const Failure = ({failStatus, setFailStatus}) => {
+    // const [visible, setVisible] = useState(true);
+  
+    const onDismiss = () => setFailStatus(false);
+  
     return (
-        <div className="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Oops!</strong> This email is taken, or invalid. Try again!
-            <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={setFailStatus(false)}>
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    )
-}
+      <Alert color="danger" isOpen={failStatus} toggle={onDismiss} fade={true}>
+        <strong>Oops!</strong> This email is taken, or invalid. Try again!
+      </Alert>
+    );
+  }

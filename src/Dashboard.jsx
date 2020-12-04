@@ -26,13 +26,19 @@ function Dashboard(props) {
 
     console.log(res.data.id);
     const url = `/projects/${res.data.id}`;
-    axiosHelper({ method: 'get', url, sf: showProjects })
+    const headers = {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+    }
+    axiosHelper({ method: 'get', url, sf: showProjects, headers })
   }
 
   //did mount
   useEffect(() => {
     console.log('did mount', loginState)
     // console.log('bearer', accessToken)
+
+    //conditionally render only if bearer length > 0
     const headers = {
       'Accept': 'application/json',
       'Authorization': `Bearer ${accessToken}`,

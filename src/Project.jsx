@@ -20,8 +20,13 @@ function Project() {
         console.log('did mount', projectID)
         const url = `/sub_projects/${projectID}`
 
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+        }
 
-        axiosHelper({ method: 'get', url, sf: showSubProjects })
+
+        axiosHelper({ method: 'get', url, sf: showSubProjects, headers })
     }, [])
 
     const showSubProjects = (res) => {
@@ -36,7 +41,7 @@ function Project() {
 
             {subData.map((item, index) => {
                 return (
-                    <ul className="list-group">
+                    <ul className="list-group" key={index}>
                         <li className="list-group-item">{item.name}</li>
                         <li className="list-group-item">{item.notes}</li>
 

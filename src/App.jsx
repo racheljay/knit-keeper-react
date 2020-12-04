@@ -50,18 +50,21 @@ function App() {
             <Register />
           </Route>
 
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
+          {loginState &&
+            <>
+              <Route path="/dashboard">
+                <Dashboard />
+              </Route>
 
-          <Route path="/project">
-            <Project />
-          </Route>
+              <Route path="/project">
+                <Project />
+              </Route>
 
-          <Route path="/add-project">
-            <AddProject />
-          </Route>
-
+              <Route path="/add-project">
+                <AddProject />
+              </Route>
+            </>
+          }
         </AppProvider>
       </Router>
     </div>
@@ -69,3 +72,9 @@ function App() {
 }
 
 export default App;
+
+function AccessDenied() {
+  return (
+    <h1>Please log in or make an account</h1>
+  )
+}

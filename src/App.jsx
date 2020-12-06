@@ -6,6 +6,7 @@ import Login from './Login';
 import Dashboard from './Dashboard';
 import AddProject from './AddProject';
 import Project from './Project';
+import SubProject from './SubProject';
 import EditProject from './EditProject';
 import { AppProvider } from './utilities/AppContext';
 import AppContext from './utilities/AppContext';
@@ -20,6 +21,9 @@ function App() {
   const [projectID, setProjectID] = useState(0);
   const [failStatus, setFailStatus] = useState(false);
   const [editIndex, setEditIndex] = useState(-1);
+  const [subID, setSubID] = useState(0);
+  const [subIndex, setSubIndex] = useState(-1);
+  const [subData, setSubData] = useState([])
 
 
 const [projectData, setProjectData] = useState([]);
@@ -51,7 +55,10 @@ const [projectData, setProjectData] = useState([]);
     patternUrl, setPatternUrl,
     needleSize, setNeedleSize,
     yarn, setYarn,
-    editIndex, setEditIndex
+    editIndex, setEditIndex,
+    subID, setSubID,
+    subIndex, setSubIndex,
+    subData, setSubData
   }
   return (
     <div>
@@ -74,6 +81,10 @@ const [projectData, setProjectData] = useState([]);
 
             <PrivateRoute path="/edit-project">
               <EditProject />
+            </PrivateRoute>
+
+            <PrivateRoute path="/sub-project">
+              <SubProject />
             </PrivateRoute>
 
             <Route exact path="/">

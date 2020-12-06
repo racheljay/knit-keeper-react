@@ -13,11 +13,13 @@ function Dashboard(props) {
     userName, setUserName,
     userID, setUserID,
     projectID, setProjectID,
-    setProjectName
+    setProjectName,
+    projectData, setProjectData,
+    setEditIndex
   } = useContext(AppContext);
 
 
-  const [projectData, setProjectData] = useState([]);
+  
 
   const getUserInfo = (res) => {
     console.log(res)
@@ -104,13 +106,24 @@ function Dashboard(props) {
     // console.log(id);
   }
 
+  const goToEdit = (id, index) => {
+    setProjectID(id)
+    setEditIndex(index)
+    history.push('/edit-project')
+  }
+
   const deleteProject = (id) => {
     console.log('project to be deleted', id)
     const url = "/delete-project";
     const data = {
       "id": id
     }
-    axiosHelper({ method: 'delete', url, data })
+
+    const headers = {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+    }
+    axiosHelper({ method: 'delete', url, data, headers })
     // "page refresh" magic stolen from todo list
     let arr = projectData.filter(item => {
       if (item.id !== id) {
@@ -160,7 +173,10 @@ function Dashboard(props) {
                   <a className="dropdown-item" href="#">Needle Size: {item.needle_size}</a>
                   <a className="dropdown-item" href="#">Yarn: {item.yarn}</a>
                   <div className="dropdown-divider"></div>
+                  <a className="dropdown-item text-success" onClick={() => goToEdit(item.id, index)}>Edit Details</a>
+                  <div className="dropdown-divider"></div>
                   <a className="dropdown-item text-danger" onClick={() => deleteProject(item.id)}>Delete Project</a>
+
                 </div>
               </div>
             )

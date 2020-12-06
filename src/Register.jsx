@@ -56,9 +56,7 @@ function Register(props) {
         <div className="container">
             <h1>New Account:</h1>
 
-            {/* {failStatus && */}
                 <Failure failStatus={failStatus} setFailStatus={setFailStatus}/>
-            {/* } */}
 
             <div className="form-group row">
                 <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">User Name</label>
@@ -117,18 +115,6 @@ function Register(props) {
 
 export default Register;
 
-// const Failure = () => {
-//     const { setFailStatus } = useContext(AppContext);
-
-//     return (
-//         <div className="alert alert-danger alert-dismissible fade show alert-fail" role="alert">
-//             <strong>Oops!</strong> This email is taken, or invalid. Try again!
-//             <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={() => $('.alert-fail').alert('close')}>
-//                 <span aria-hidden="true">&times;</span>
-//             </button>
-//         </div>
-//     )
-// }
 
 const Failure = ({failStatus, setFailStatus}) => {
     // const [visible, setVisible] = useState(true);

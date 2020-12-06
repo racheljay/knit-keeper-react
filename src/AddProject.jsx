@@ -3,36 +3,31 @@ import { useHistory, Link } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
-function AddProject(props) {
+function AddProject() {
 	let history = useHistory();
 
 const {
 	loginState, setLoginState,
 	accessToken, setAccessToken,
 	userID, setUserID,
-	res, setRes
+	res, setRes,
+	projectName, setProjectName,
+    patternName, setPatternName,
+    patternUrl, setPatternUrl,
+    needleSize, setNeedleSize,
+    yarn, setYarn
+
 } = useContext(AppContext);
-
-	const [projectName, setProjectName] = useState('');
-	const [patternName, setPatternName] = useState('');
-	const [patternUrl, setPatternUrl] = useState('');
-	const [needleSize, setNeedleSize] = useState(0);
-	const [yarn, setYarn] = useState('');
-
-
-
-
-// console.log(props.res);
 
 	const success = (res) => {
 		console.log('in submit', res)
 		setRes(res)
 		if (res.status === 200) {
-			console.log('add project', res)
+			console.log('edit', res)
 			setTimeout(() => {
 				setRes({})
 				history.push('/dashboard')
-			}, 2000)
+			}, 1500)
 		}
 	}
 
@@ -71,8 +66,6 @@ const {
 				<Success />
 				: <></>
 			}
-
-
 
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Project Name</label>

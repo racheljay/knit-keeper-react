@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
+import {Alert} from 'reactstrap';
 import  axiosHelper  from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
@@ -12,6 +13,7 @@ function Login(props) {
 	let history = useHistory();
 
 	const { setLoginState,loginState, accessToken, setAccessToken } = useContext(AppContext);
+	const [failStatus, setFailStatus] = useState(false);
 
 	useEffect(() => {
 		console.log('did mount', loginState)
@@ -26,6 +28,12 @@ function Login(props) {
 			history.push('/dashboard')
 		}
 	}
+
+	const fail = (e) => {
+        console.log(e)
+        setFailStatus(true)
+        // $('.alert-fail').alert()
+    }
 	
 	const handleClick = () => {
 		const data = {
@@ -45,7 +53,7 @@ function Login(props) {
 		
 		const method = 'post';
 		const url = '/v1/oauth/token';
-		axiosHelper({method, url, sf: submit, data})
+		axiosHelper({method, url, sf: submit, data, ff: fail})
 		//check if bearer token is in session storage if it it, then set
 		setLoginState(true);
 		console.log('after axios', loginState);
@@ -54,6 +62,9 @@ function Login(props) {
 	return (
 		<div className="container">
 			<h1>Login:</h1>
+
+			<Failure failStatus={failStatus} setFailStatus={setFailStatus}/>
+
 
 			<div className="form-group row">
 				<label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
@@ -98,3 +109,15 @@ function Login(props) {
 }
 
 export default Login;
+
+const Failure = ({failStatus, setFailStatus}) => {
+    // const [visible, setVisible] = useState(true);
+  
+    const onDismiss = () => setFailStatus(false);
+  
+    return (
+      <Alert color="danger" isOpen={failStatus} toggle={onDismiss} fade={true}>
+        Username or password is incorrect
+      </Alert>
+    );
+  }

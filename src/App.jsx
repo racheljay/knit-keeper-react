@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import Nav from './Nav';
 import Register from './Register';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import AddProject from './AddProject';
 import Project from './Project';
+import EditProject from './EditProject';
 import { AppProvider } from './utilities/AppContext';
+import AppContext from './utilities/AppContext';
+
 
 function App() {
   const [loginState, setLoginState] = useState(false)
@@ -15,8 +18,16 @@ function App() {
   const [userID, setUserID] = useState(0);
   const [res, setRes] = useState({});
   const [projectID, setProjectID] = useState(0);
-  const [projectName, setProjectName] = useState('');
   const [failStatus, setFailStatus] = useState(false);
+  const [editIndex, setEditIndex] = useState(-1);
+
+
+const [projectData, setProjectData] = useState([]);
+  const [projectName, setProjectName] = useState('');
+	const [patternName, setPatternName] = useState('');
+	const [patternUrl, setPatternUrl] = useState('');
+	const [needleSize, setNeedleSize] = useState(0);
+	const [yarn, setYarn] = useState('');
 
   useEffect(() => {
     const token = window.sessionStorage.getItem('token')
@@ -33,38 +44,48 @@ function App() {
     userID, setUserID,
     res, setRes,
     projectID, setProjectID,
+    failStatus, setFailStatus,
+    projectData, setProjectData,
     projectName, setProjectName,
-    failStatus, setFailStatus
+    patternName, setPatternName,
+    patternUrl, setPatternUrl,
+    needleSize, setNeedleSize,
+    yarn, setYarn,
+    editIndex, setEditIndex
   }
   return (
     <div>
       <Router>
         <AppProvider value={initialContext}>
           <Nav />
+          <Switch>
 
-          <Route exact path="/">
-            <Login />
-          </Route>
+            <PrivateRoute path="/dashboard" >
+              <Dashboard />
+            </PrivateRoute>
 
-          <Route path="/register">
-            <Register />
-          </Route>
+            <PrivateRoute path="/project">
+              <Project />
+            </PrivateRoute>
 
-          {loginState &&
-            <>
-              <Route path="/dashboard">
-                <Dashboard />
-              </Route>
+            <PrivateRoute path="/add-project">
+              <AddProject />
+            </PrivateRoute>
 
-              <Route path="/project">
-                <Project />
-              </Route>
+            <PrivateRoute path="/edit-project">
+              <EditProject />
+            </PrivateRoute>
 
-              <Route path="/add-project">
-                <AddProject />
-              </Route>
-            </>
-          }
+            <Route exact path="/">
+              <Login />
+            </Route>
+
+            <Route path="/register">
+              <Register />
+            </Route>
+
+          </Switch>
+
         </AppProvider>
       </Router>
     </div>
@@ -73,8 +94,27 @@ function App() {
 
 export default App;
 
-function AccessDenied() {
+function PrivateRoute({ children, ...rest }) {
+  const token = window.sessionStorage.getItem('token')
+
+  const {loginState, userID} = useContext(AppContext);
+
   return (
-    <h1>Please log in or make an account</h1>
-  )
+    <Route
+    {...rest}
+    render={({ location }) =>
+    token !== null ? (
+      children
+      ) : (
+          <Redirect
+          to={{
+            pathname: "/",
+            state: { from: location }
+          }}
+          />
+          )
+        }
+        />
+        );
+      
 }

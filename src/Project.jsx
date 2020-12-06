@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
@@ -24,8 +24,6 @@ function Project() {
             'Accept': 'application/json',
             'Authorization': `Bearer ${accessToken}`,
         }
-
-
         axiosHelper({ method: 'get', url, sf: showSubProjects, headers })
     }, [])
 
@@ -37,7 +35,11 @@ function Project() {
     return (
         <div className="container">
 
-            <h1>{projectName}</h1>
+            <h1>{projectName} <span> +</span></h1>
+            <button 
+            className="btn btn-light"
+            onClick={() => console.log('click')}
+            >Add Section</button>
 
             {subData.map((item, index) => {
                 return (
@@ -50,9 +52,33 @@ function Project() {
 
             })}
 
+            <AddSubProject/>
+
+
+
             <Link to="/dashboard">Back to dash</Link>
         </div>
     )
 }
 
 export default Project;
+
+function AddSubProject () {
+    return(
+        <>
+            <h1>Addproject</h1>
+            <div className="form-group">
+                <label htmlFor="exampleFormControlInput1">Section:</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Name"
+                    // onChange={e => setProjectName(e.target.value)}
+                />
+                
+                <button className="btn btn-warning">Add Section</button>
+
+            </div>
+        </>
+    )
+}

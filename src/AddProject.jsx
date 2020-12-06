@@ -19,6 +19,14 @@ const {
 
 } = useContext(AppContext);
 
+useEffect(() => {
+	setProjectName('')
+	setPatternName('')
+	setPatternUrl('')
+	setNeedleSize(0)
+	setYarn(0)
+}, [])
+
 	const success = (res) => {
 		console.log('in submit', res)
 		setRes(res)

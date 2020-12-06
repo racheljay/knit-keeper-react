@@ -15,6 +15,7 @@ function Project() {
     } = useContext(AppContext);
 
     const [subData, setSubData] = useState([])
+    const [showAdd, setShowAdd] = useState(false)
 
     useEffect(() => {
         console.log('did mount', projectID)
@@ -32,15 +33,31 @@ function Project() {
         setSubData(res.data)
     }
 
+
     return (
         <div className="container">
 
             <h1>{projectName} <span> +</span></h1>
-            <button 
-            className="btn btn-light"
-            onClick={() => console.log('click')}
-            >Add Section</button>
+            {!showAdd ?
+                <button
+                    className="btn btn-light"
+                    onClick={() => setShowAdd(true)}
+                >Add Section</button>
+                : <button
+                    className="btn btn-light"
+                    onClick={() => setShowAdd(false)}
+                >Hide</button>
+            }
 
+            {showAdd ?
+                <AddSubProject
+                    showAdd={showAdd}
+                    setShowAdd={setShowAdd}
+                    subData={subData}
+                    setSubData={setSubData}
+                />
+                : <></>
+            }
             {subData.map((item, index) => {
                 return (
                     <ul className="list-group" key={index}>
@@ -52,8 +69,6 @@ function Project() {
 
             })}
 
-            <AddSubProject/>
-
 
 
             <Link to="/dashboard">Back to dash</Link>
@@ -63,20 +78,63 @@ function Project() {
 
 export default Project;
 
-function AddSubProject () {
-    return(
+function AddSubProject(props) {
+    const {
+        accessToken, setAccessToken,
+        projectID, setProjectID,
+        projectName
+    } = useContext(AppContext);
+
+    const [name, setName] = useState('')
+
+    const success = (res) => {
+        console.log('in submit', res)
+        if (res.status === 200) {
+            // setTimeout(() => {
+            //     setRes({})
+            //     history.push('/dashboard')
+            // }, 1500)
+        }
+    }
+
+    const handleClick = () => {
+        const data = {
+            project_id: projectID,
+            name,
+            count: 0,
+            notes: ""
+        };
+
+        const headers = {
+            'Content_Type': 'application/json;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+            'Access': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+        }
+
+        const method = 'post';
+        const url = `/add-sub-project`;
+        axiosHelper({ method, url, sf: success, data, headers, })
+        // props.setShowAdd(false)
+        props.setSubData(props.subData.concat(data))
+    }
+    return (
+
         <>
-            <h1>Addproject</h1>
+            <h1>Add Section:</h1>
             <div className="form-group">
                 <label htmlFor="exampleFormControlInput1">Section:</label>
                 <input
                     type="text"
                     className="form-control"
                     placeholder="Name"
-                    // onChange={e => setProjectName(e.target.value)}
+                    onChange={e => setName(e.target.value)}
                 />
-                
-                <button className="btn btn-warning">Add Section</button>
+
+                <button
+                    className="btn btn-warning"
+                    onClick={handleClick}
+                >Add Section</button>
 
             </div>
         </>

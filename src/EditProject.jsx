@@ -67,8 +67,7 @@ function EditProject() {
     return (
         <div className="container">
             <h1>Edit Project:</h1>
-            <div>Project ID: {projectID}</div>
-            <div>Edit Index: {editIndex}</div>
+
 
             {res.status === 200 ?
 				<Success />
@@ -81,7 +80,6 @@ function EditProject() {
                     type="text"
                     className="form-control"
                     defaultValue={projectName}
-                    placeholder="Name"
                     onChange={e => setProjectName(e.target.value)}
                 />
             </div>
@@ -92,7 +90,6 @@ function EditProject() {
                     type="text"
                     className="form-control"
                     defaultValue={patternName}
-                    placeholder="Name"
                     onChange={e => setPatternName(e.target.value)}
                 />
             </div>
@@ -103,7 +100,6 @@ function EditProject() {
                     type="url"
                     className="form-control"
                     defaultValue={patternUrl}
-                    placeholder="http://www.example.com"
                     onChange={e => setPatternUrl(e.target.value)}
                 />
             </div>
@@ -114,7 +110,6 @@ function EditProject() {
                     type="number"
                     className="form-control"
                     defaultValue={needleSize}
-                    placeholder="0"
                     onChange={e => setNeedleSize(e.target.value)}
                 />
             </div>
@@ -125,7 +120,6 @@ function EditProject() {
                     type="text"
                     className="form-control"
                     defaultValue={yarn}
-                    placeholder="Worsted"
                     onChange={e => setYarn(e.target.value)}
                 />
             </div>

@@ -163,12 +163,12 @@ function Dashboard(props) {
 
           projectData.map((item, index) => {
             return (
-              <div className="btn-group" key={index}>
-                <button type="button" className="btn btn-secondary" onClick={() => goToProject(item.id, item.project_name)}>{item.project_name}</button>
-                <button type="button" className="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+              <div className="btn-group btn-block" key={index}>
+                <button type="button" className="btn btn-light btn-lg btn-block" onClick={() => goToProject(item.id, item.project_name)}>{item.project_name}</button>
+                <button type="button" className="btn btn-light btn-lg dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
                   <span className="sr-only">Toggle Dropdown</span>
                 </button>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuReference">
                   <a className="dropdown-item" target="_blank" href={item.pattern_url}>Pattern Name: {item.pattern_name}</a>
                   <a className="dropdown-item" href="#">Needle Size: {item.needle_size}</a>
                   <a className="dropdown-item" href="#">Yarn: {item.yarn}</a>

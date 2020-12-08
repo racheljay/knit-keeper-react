@@ -15,7 +15,7 @@ function Project() {
 		projectName,
 		subID, setSubID,
 		setSubIndex,
-		subProjectData, setSubProjectData, currentProject,
+		subProjectData, setSubProjectData, currentProject, setCurrentProject,
 		currentSubProject, setCurrentSubProject,
 		clicked, setClicked
 		
@@ -25,6 +25,20 @@ function Project() {
 	// const [clicked, setClicked] = useState(false)
 
 	useEffect(() => {
+
+		const lscurrentProject = sessionStorage.getItem('currentProject')
+		const lssubData = sessionStorage.getItem('subData')
+
+		if(lscurrentProject) {
+			setCurrentProject(JSON.parse(lscurrentProject))
+			// console.log('sub data', JSON.parse(lscurrentProject.sub_projects))
+			// setSubProjectData(JSON.parse(lscurrentProject.sub_projects))
+		}
+		if(lssubData) {
+			setSubProjectData(JSON.parse(lssubData));
+		}
+		
+		
 		console.log('did mount', currentProject)
 		const url = `/sub_projects/${currentProject.id}`
 
@@ -32,17 +46,20 @@ function Project() {
 			'Accept': 'application/json',
 			'Authorization': `Bearer ${accessToken}`,
 		}
+		
 		axiosHelper({ method: 'get', url, sf: showSubProjects, headers })
 	}, [showAdd, clicked])
 
 	const showSubProjects = (res) => {
 		console.log(res.data);
 		setSubProjectData(res.data)
+		sessionStorage.setItem('subData', JSON.stringify(res.data))
 	}
 
 	const goToSubProject = (subProject) => {
 		// setSubID(id);
-    setCurrentSubProject(subProject);
+		setCurrentSubProject(subProject);
+		sessionStorage.setItem('currentSubProject', JSON.stringify(subProject))
     history.push('/sub-project')
 	}
 
@@ -50,7 +67,7 @@ function Project() {
 	return (
 		<div className="container">
 
-			<h1>{projectName}</h1>
+			<h1>{currentProject.project_name}</h1>
 			{!showAdd ?
 				<button
 					className="btn btn-light"

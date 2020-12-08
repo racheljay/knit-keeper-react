@@ -27,7 +27,6 @@ function Dashboard(props) {
 
 
   useEffect(() => {
-    // setProjectData({});
     const headers = {
       'Content_Type': 'application/json;charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
@@ -93,6 +92,7 @@ function Dashboard(props) {
     // setProjectID(id);
     // setProjectName(name);
     // const tempProject = JSON.parse(JSON.stringify(project))
+    sessionStorage.setItem('currentProject', JSON.stringify(project))
     setCurrentProject(project)
     setProjectName(project.project_name)
     setPatternName(project.pattern_name)

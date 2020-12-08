@@ -49,8 +49,6 @@ function App() {
     // setUserName(res.data[0].name);
     // setUserID(res.data[0].id);
     setProjectData(res.data[0].projects);
-    // for(let item of res.data[0].projects)
-    // setSubData(res.data[0].)
 
     console.log(res.data);
     // const url = `/projects/${res.data.id}`;

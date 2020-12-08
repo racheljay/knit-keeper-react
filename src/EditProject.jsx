@@ -50,6 +50,7 @@ function EditProject() {
         setRes(res)
         if (res.status === 200) {
             console.log('add project', res)
+            //this is the line that fixed it
             setProjectData(res.data.data)
             setTimeout(() => {
                 setRes({})

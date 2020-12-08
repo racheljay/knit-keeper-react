@@ -12,7 +12,7 @@ function Dashboard(props) {
     accessToken, setAccessToken,
     // userName, setUserName,
     // userID, setUserID,
-    projectID, setProjectID,
+    // projectID, setProjectID,
     setProjectName,
     setPatternName,
     setNeedleSize,
@@ -109,6 +109,7 @@ function Dashboard(props) {
     // setCurrentProject(previousState => previousState = { ...tempProject })
     setCurrentProject(project);
 
+    //setting these on this page because state won't cooperate
     setProjectName(project.project_name)
     setPatternName(project.pattern_name)
     setPatternUrl(project.pattern_url)

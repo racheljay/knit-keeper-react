@@ -78,7 +78,7 @@ function Project() {
 						className="list-group-item list-group-item-action list-group-item-info d-flex justify-content-between align-items-center"
 						onClick={() => goToSubProject(item)}
 						>{item.name}
-						<span class="badge badge-info badge-pill">{item.count}</span>
+						<span className="badge badge-info badge-pill">{item.count}</span>
 						</li>
 						{/* <li className="list-group-item">{item.notes}</li> */}
 

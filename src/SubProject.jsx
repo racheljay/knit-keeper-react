@@ -6,6 +6,14 @@ import AppContext from './utilities/AppContext';
 function SubProject() {
     const history = useHistory();
 
+    //things that a use effect should check for on different pages
+    //bearer token
+    //projects
+    //subprojects
+    //to fix reload issue
+    //current project id in LS
+    //current subproject id in LS
+
     const {
         subID, subIndex, projectName,
         subData, setSubData,
@@ -82,6 +90,27 @@ function SubProject() {
         setSubCount(0)
   }
 
+  const deleteSection = () => {
+      console.log(currentSubProject.id)
+
+      const data = {
+        id: currentSubProject.id
+    };
+
+    const headers = {
+        'Content_Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': '*',
+        'Access': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+    }
+
+    const method = 'delete';
+    const url = '/delete-sub-project';
+
+    axiosHelper({method, url, data, headers})
+    history.push('/project')
+  }
+
 
     return (
         <div className="container">
@@ -131,7 +160,10 @@ function SubProject() {
                 </div>
 
             </div>
-
+            <button
+            className="btn btn-danger"
+            onClick={deleteSection}
+            >Delete Section</button>
             <Link to="/project">Back to Project</Link>
         </div>
     )

@@ -32,8 +32,8 @@ useEffect(() => {
 		setRes(res)
 		if (res.status === 200) {
 			//this is the line that fixed it
-			setProjectData(res.data.data)
-			console.log('edit', res)
+			setProjectData(res.data)
+			console.log('success', res)
 			setTimeout(() => {
 				setRes({})
 				history.push('/dashboard')

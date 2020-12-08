@@ -27,14 +27,18 @@ function Dashboard(props) {
 
 
   useEffect(() => {
+    console.log('project data', projectData)
     const headers = {
       'Content_Type': 'application/json;charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
       'Access': 'application/json',
       'Authorization': `Bearer ${accessToken}`,
     }
-    axiosHelper({ method: 'get', url: `projects/${user.id}`, headers, sf: showProjects })
-  }, [])
+    if(projectData) {
+
+      axiosHelper({ method: 'get', url: `projects/${user.id}`, headers, sf: showProjects })
+    }
+  }, [projectData])
 
 
 
@@ -129,7 +133,10 @@ function Dashboard(props) {
     }
 
     const successfulDelete = (res) => {
+
       setProjectData(res.data.data)
+      sessionStorage.setItem('currentProject', JSON.stringify(res.data.data))
+
     }
     const headers = {
       'Accept': 'application/json',

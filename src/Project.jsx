@@ -26,6 +26,7 @@ function Project() {
 
 	useEffect(() => {
 
+
 		const lscurrentProject = sessionStorage.getItem('currentProject')
 		const lssubData = sessionStorage.getItem('subData')
 
@@ -60,7 +61,15 @@ function Project() {
 		// setSubID(id);
 		setCurrentSubProject(subProject);
 		sessionStorage.setItem('currentSubProject', JSON.stringify(subProject))
+		sessionStorage.setItem('currentSubCount', JSON.stringify(subProject.count))
     history.push('/sub-project')
+	}
+
+	const backToDash = () => {
+		setSubProjectData([])
+		sessionStorage.removeItem('subData')
+		sessionStorage.removeItem('currentProject')
+		history.push('/dashboard')
 	}
 
 
@@ -106,7 +115,7 @@ function Project() {
 
 
 
-			<Link to="/dashboard">Back to dash</Link>
+<button className="btn btn-link" onClick={backToDash}>Back to Dashboard</button>
 		</div>
 	)
 }

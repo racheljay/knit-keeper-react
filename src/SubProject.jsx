@@ -40,22 +40,25 @@ function SubProject() {
     useEffect(() => {
 
         const lscurrentProject = sessionStorage.getItem('currentProject')
-		const lssubData = sessionStorage.getItem('subData')
+        const lssubData = sessionStorage.getItem('subData')
+        const lscount = sessionStorage.getItem('currentSubCount')
 
-		if(lscurrentProject) {
-			setCurrentProject(JSON.parse(lscurrentProject))
-			// console.log('sub data', JSON.parse(lscurrentProject.sub_projects))
-			// setSubProjectData(JSON.parse(lscurrentProject.sub_projects))
-		}
-		if(lssubData) {
-			setSubProjectData(JSON.parse(lssubData));
-		}
+        if (lscurrentProject) {
+            setCurrentProject(JSON.parse(lscurrentProject))
+            // console.log('sub data', JSON.parse(lscurrentProject.sub_projects))
+            // setSubProjectData(JSON.parse(lscurrentProject.sub_projects))
+        }
+        if (lssubData) {
+            setSubProjectData(JSON.parse(lssubData));
+        }
         const lscurrentSubProject = sessionStorage.getItem('currentSubProject')
-        const parsed = JSON.parse(lscurrentProject)
 
-        if(lscurrentSubProject) {
+        if (lscurrentSubProject) {
             setCurrentSubProject(JSON.parse(lscurrentSubProject))
-            // setSubCount(parsed.count)
+        }
+        if(lscount) {
+            setSubCount(JSON.parse(lscount));
+
         }
     }, [])
     useEffect(() => {
@@ -133,6 +136,13 @@ function SubProject() {
         history.push('/project')
     }
 
+    const backToProject = () => {
+        setCurrentSubProject({})
+        sessionStorage.removeItem('currentSubCount')
+        sessionStorage.removeItem('currentSubProject')
+
+        history.push('/project')
+    }
 
     return (
         <div className="container">
@@ -186,7 +196,7 @@ function SubProject() {
                 className="btn btn-danger"
                 onClick={deleteSection}
             >Delete Section</button>
-            <Link to="/project">Back to Project</Link>
+            <button className="btn btn-link" onClick={backToProject}>Back to Project</button>
         </div>
     )
 }

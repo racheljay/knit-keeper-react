@@ -7,15 +7,15 @@ function AddProject() {
 	let history = useHistory();
 
 const {
-	loginState, setLoginState,
 	accessToken, setAccessToken,
-	userID, setUserID,
+	user,
+	// userID, setUserID,
 	res, setRes,
 	projectName, setProjectName,
     patternName, setPatternName,
     patternUrl, setPatternUrl,
     needleSize, setNeedleSize,
-    yarn, setYarn
+    yarn, setYarn, projectData, setProjectData, setCurrentProject
 
 } = useContext(AppContext);
 
@@ -24,13 +24,15 @@ useEffect(() => {
 	setPatternName('')
 	setPatternUrl('')
 	setNeedleSize(0)
-	setYarn(0)
+	setYarn('')
 }, [])
 
 	const success = (res) => {
 		console.log('in submit', res)
 		setRes(res)
 		if (res.status === 200) {
+			//this is the line that fixed it
+			setProjectData(res.data.data)
 			console.log('edit', res)
 			setTimeout(() => {
 				setRes({})
@@ -46,7 +48,7 @@ useEffect(() => {
 
 	const handleClick = () => {
 		const data = {
-			user_id: userID,
+			user_id: user.id,
 			project_name: projectName,
 			pattern_name: patternName,
 			pattern_url: patternUrl,
@@ -64,7 +66,16 @@ useEffect(() => {
 		const method = 'post';
 		const url = `/add-project`;
 		axiosHelper({ method, url, sf: success, data, headers, })
+
+		// projectData.concat(data);
+
 	}
+
+	const backToDash = () => {
+        const obj = {};
+        setCurrentProject(prev => prev = obj)
+        history.push('/dashboard')
+    }
 
 	return (
 		<div className="container">
@@ -132,7 +143,7 @@ useEffect(() => {
 				className="btn btn-danger"
 				onClick={handleClick}
 			>Submit</button>
-			<Link to="/dashboard">Back to Dash</Link>
+            <button className="btn btn-link" onClick={backToDash}>Back to Dash</button>
 
 			{/* <div class="form-group">
 				<label for="exampleFormControlTextarea1">Example textarea</label>

@@ -8,7 +8,7 @@ import AppContext from './utilities/AppContext';
 function Register(props) {
     let history = useHistory();
 
-    const { setLoginState, loginState, accessToken, setAccessToken } = useContext(AppContext);
+    const {  accessToken, setAccessToken } = useContext(AppContext);
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -47,8 +47,8 @@ function Register(props) {
         const method = 'post';
         const url = '/register';
         axiosHelper({ method, url, sf: submit, data, headers, ff: fail })
-        setLoginState(true);
-        console.log(loginState)
+        // setLoginState(true);
+        // console.log(loginState)
     }
 
 

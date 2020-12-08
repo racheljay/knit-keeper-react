@@ -12,12 +12,10 @@ function Login(props) {
 
 	let history = useHistory();
 
-	const { setLoginState,loginState, accessToken, setAccessToken } = useContext(AppContext);
+	const { accessToken, setAccessToken } = useContext(AppContext);
 	const [failStatus, setFailStatus] = useState(false);
 
-	useEffect(() => {
-		console.log('did mount', loginState)
-	}, [])
+
 //submit method used in axios call
 	const submit = (res) => {
 		if (res.status === 200) {
@@ -55,8 +53,8 @@ function Login(props) {
 		const url = '/v1/oauth/token';
 		axiosHelper({method, url, sf: submit, data, ff: fail})
 		//check if bearer token is in session storage if it it, then set
-		setLoginState(true);
-		console.log('after axios', loginState);
+		// setLoginState(true);
+		// console.log('after axios', loginState);
 	}
 
 	return (

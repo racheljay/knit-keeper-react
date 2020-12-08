@@ -9,13 +9,23 @@ function SubProject() {
     const {
         subID, subIndex, projectName,
         subData, setSubData,
-        accessToken
+        accessToken,
+        subProjectData,
+        currentSubProject
     } = useContext(AppContext);
 
-    const [subProjID, setSubProjID] = useState(subData[subIndex].project_id);
-    const [subName, setSubName] = useState(subData[subIndex].name);
-    const [subCount, setSubCount] = useState(subData[subIndex].count);
-    const [subNotes, setSubNotes] = useState(subData[subIndex].notes)
+    useEffect(() => {
+        console.log('sub projects', subProjectData)
+        console.log('current sub project', currentSubProject)
+        console.log('subcount', subCount)
+    }, [])
+
+    const [subProjID, setSubProjID] = useState(currentSubProject.id);
+    const [subName, setSubName] = useState(currentSubProject.name);
+    const [subCount, setSubCount] = useState(currentSubProject.count);
+    const [subNotes, setSubNotes] = useState(currentSubProject.notes)
+
+    let mutableCount = currentSubProject.count
 
     useEffect(() => {
         // console.log(subData[subIndex])
@@ -35,7 +45,7 @@ function SubProject() {
         }
 
         const method = 'put';
-        const url = `/edit-subproject/${subID}`;
+        const url = `/edit-subproject/${currentSubProject.id}`;
 
         axiosHelper({method, url, data, headers, sf: success, ff: failure})
 
@@ -56,7 +66,10 @@ function SubProject() {
     }
     const increase = () => {
         console.log('plus')
+        setSubCount(0)
         setSubCount(subCount + 1)
+        mutableCount++
+        console.log('subcount increase', subCount)
     }
 
     const decrease = () => {
@@ -67,18 +80,20 @@ function SubProject() {
     const reset = () => {
         console.log('reset')
         setSubCount(0)
-    }
+  }
 
 
     return (
         <div className="container">
             <h2>{projectName}: </h2>
-            <h2>{subName}</h2>
+            <h2>{currentSubProject.name}</h2> 
             {/* <div>SubID: {subID}</div>
             <div>SubIndex: {subIndex}</div> */}
             <div className="row justify-content-center">
                 <div className="col-4 ">
-                    <h1 className="text-center border border-danger rounded-pill p-2">{subCount}</h1>
+                    <h1
+                    className="text-center border border-danger rounded-pill p-2"
+                    >{subCount}</h1>
                 </div>
             </div>
             <div className="row justify-content-center">
@@ -110,7 +125,7 @@ function SubProject() {
             id=""
             cols="50"
             rows="5"
-            defaultValue={subNotes}
+            defaultValue={currentSubProject.notes}
             onChange={e => setSubNotes(e.target.value)}
             ></textarea>
                 </div>

@@ -15,30 +15,34 @@ function Project() {
 		projectName,
 		subID, setSubID,
 		setSubIndex,
-		subData, setSubData
+		subProjectData, setSubProjectData, currentProject,
+		currentSubProject, setCurrentSubProject,
+		clicked, setClicked
+		
 	} = useContext(AppContext);
 
 	const [showAdd, setShowAdd] = useState(false)
+	// const [clicked, setClicked] = useState(false)
 
 	useEffect(() => {
-		console.log('did mount', projectID)
-		const url = `/sub_projects/${projectID}`
+		console.log('did mount', currentProject)
+		const url = `/sub_projects/${currentProject.id}`
 
 		const headers = {
 			'Accept': 'application/json',
 			'Authorization': `Bearer ${accessToken}`,
 		}
 		axiosHelper({ method: 'get', url, sf: showSubProjects, headers })
-	}, [])
+	}, [showAdd, clicked])
 
 	const showSubProjects = (res) => {
 		console.log(res.data);
-		setSubData(res.data)
+		setSubProjectData(res.data)
 	}
 
-	const goToSubProject = (index, id) => {
-		setSubID(id);
-    setSubIndex(index);
+	const goToSubProject = (subProject) => {
+		// setSubID(id);
+    setCurrentSubProject(subProject);
     history.push('/sub-project')
 	}
 
@@ -46,7 +50,7 @@ function Project() {
 	return (
 		<div className="container">
 
-			<h1>{projectName} <span> +</span></h1>
+			<h1>{projectName}</h1>
 			{!showAdd ?
 				<button
 					className="btn btn-light"
@@ -62,17 +66,17 @@ function Project() {
 				<AddSubProject
 					showAdd={showAdd}
 					setShowAdd={setShowAdd}
-					subData={subData}
-					setSubData={setSubData}
+					setClicked={setClicked}
+
 				/>
 				: <></>
 			}
-			{subData.map((item, index) => {
+			{subProjectData.map((item, index) => {
 				return (
 					<ul className="list-group" key={index}>
 						<li
 						className="list-group-item list-group-item-action list-group-item-info d-flex justify-content-between align-items-center"
-						onClick={() => goToSubProject(index, item.id)}
+						onClick={() => goToSubProject(item)}
 						>{item.name}
 						<span class="badge badge-info badge-pill">{item.count}</span>
 						</li>
@@ -92,12 +96,14 @@ function Project() {
 
 export default Project;
 
-function AddSubProject(props) {
+function AddSubProject() {
 	const {
 		accessToken, setAccessToken,
 		projectID, setProjectID,
 		projectName,
-		subData, setSubData
+		subData, setSubData,
+		subProjectData, setSubProjectData, currentProject,
+		clicked, setClicked
 	} = useContext(AppContext);
 
 	const [name, setName] = useState('')
@@ -106,12 +112,13 @@ function AddSubProject(props) {
 		console.log('in submit', res)
 		if (res.status === 200) {
 			console.log(res)
+			setClicked(false);
 		}
 	}
 
 	const handleClick = () => {
 		const data = {
-			project_id: projectID,
+			project_id: currentProject.id,
 			name,
 			count: 0,
 			notes: ""
@@ -128,7 +135,8 @@ function AddSubProject(props) {
 		const url = `/add-sub-project`;
 		axiosHelper({ method, url, sf: success, data, headers, })
 		// props.setShowAdd(false)
-		setSubData(subData.concat(data))
+		setSubProjectData(subProjectData.concat(data))
+		setClicked(true)
 	}
 	return (
 

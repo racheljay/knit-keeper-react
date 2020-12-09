@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
-import {Alert} from 'reactstrap';
+import {Alert, Spinner} from 'reactstrap';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
@@ -16,6 +16,8 @@ function Register(props) {
     // const [accessToken, setAccessToken] = useState('')
 
     const [failStatus, setFailStatus] = useState(false);
+    const [loading, setLoading] = useState(false);
+
 
 
     const submit = (res) => {
@@ -24,6 +26,7 @@ function Register(props) {
             // console.log(res.data.message, res.data.data.token)
             setAccessToken(res.data.data.token);
             sessionStorage.setItem('token', res.data.data.token)
+            setLoading(false)
             history.push('/dashboard');
         }
     }
@@ -36,6 +39,7 @@ function Register(props) {
 
     const handleClick = () => {
         // setFailStatus(false)
+        setLoading(true)
         const data = { name, email, password };
 
         const headers = {
@@ -57,6 +61,7 @@ function Register(props) {
             <h1>New Account:</h1>
 
                 <Failure failStatus={failStatus} setFailStatus={setFailStatus}/>
+                {loading && <Spinner color="danger" />}
 
             <div className="form-group row">
                 <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">User Name</label>

@@ -4,6 +4,12 @@ import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 import {Alert} from 'reactstrap';
 
+import ReactDOM from 'react-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { faMinusCircle } from '@fortawesome/free-solid-svg-icons'
+import { faHistory } from '@fortawesome/free-solid-svg-icons'
+
 function SubProject() {
 	const history = useHistory();
 
@@ -156,6 +162,7 @@ function SubProject() {
 			<h2>{currentSubProject.name}</h2>
 
 			<Saved saveStatus={saveStatus} setSaveStatus={setSaveStatus}/>
+			
 			{/* <div>SubID: {subID}</div>
             <div>SubIndex: {subIndex}</div> */}
 			<div className="row justify-content-center">
@@ -172,17 +179,17 @@ function SubProject() {
 
 				<div className="col-6" align="center">
 					<button
-						className="btn btn-lg btn-info"
+						className="btn btn-lg btn-outline-info"
 						onClick={decrease}
-					>-</button>
+					><FontAwesomeIcon icon={faMinusCircle} /></button>
 					<button
-						className="btn btn-lg btn-info"
+						className="btn btn-lg btn-outline-info"
 						onClick={reset}
-					>Reset</button>
+					><FontAwesomeIcon icon={faHistory} /></button>
 					<button
-						className="btn btn-lg btn-info"
+						className="btn btn-lg btn-outline-info"
 						onClick={increase}
-					>+</button>
+					><FontAwesomeIcon icon={faPlusCircle} /></button>
 				</div>
 
 				<div className="col-3">

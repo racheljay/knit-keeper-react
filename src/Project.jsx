@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
+import {Alert, Spinner} from 'reactstrap';
+
 
 
 
@@ -17,7 +19,8 @@ function Project() {
 		setSubIndex,
 		subProjectData, setSubProjectData, currentProject, setCurrentProject,
 		currentSubProject, setCurrentSubProject,
-		clicked, setClicked
+		clicked, setClicked,
+		loading, setLoading
 		
 	} = useContext(AppContext);
 
@@ -25,7 +28,6 @@ function Project() {
 	// const [clicked, setClicked] = useState(false)
 
 	useEffect(() => {
-
 
 		const lscurrentProject = sessionStorage.getItem('currentProject')
 		const lssubData = sessionStorage.getItem('subData')
@@ -52,6 +54,7 @@ function Project() {
 	}, [showAdd, clicked])
 
 	const showSubProjects = (res) => {
+		setLoading(false)
 		console.log(res.data);
 		setSubProjectData(res.data)
 		sessionStorage.setItem('subData', JSON.stringify(res.data))
@@ -77,6 +80,7 @@ function Project() {
 		<div className="container">
 
 			<h1>{currentProject.project_name}</h1>
+			{loading && <Spinner color="danger" />}
 			{!showAdd ?
 				<button
 					className="btn btn-light"

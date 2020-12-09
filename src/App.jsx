@@ -11,6 +11,8 @@ import EditProject from './EditProject';
 import { AppProvider } from './utilities/AppContext';
 import AppContext from './utilities/AppContext';
 import axiosHelper from './utilities/axiosHelper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
   const [currentProject, setCurrentProject] = useState({});
   const [user, setUser] = useState({});
   const [clicked, setClicked] = useState(false)
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     const token = window.sessionStorage.getItem('token')
@@ -101,7 +105,8 @@ function App() {
     currentProject, setCurrentProject,
     currentSubProject, setCurrentSubProject,
     subProjectData, setSubProjectData,
-    clicked, setClicked
+    clicked, setClicked,
+    loading, setLoading
   }
   return (
     <div>

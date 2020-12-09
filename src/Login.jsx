@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
-import {Alert} from 'reactstrap';
+import {Alert, Spinner} from 'reactstrap';
 import  axiosHelper  from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
@@ -12,7 +12,7 @@ function Login(props) {
 
 	let history = useHistory();
 
-	const { accessToken, setAccessToken } = useContext(AppContext);
+	const { accessToken, setAccessToken, loading, setLoading } = useContext(AppContext);
 	const [failStatus, setFailStatus] = useState(false);
 
 
@@ -23,6 +23,7 @@ function Login(props) {
 			// console.log(res.data.message, res.data.data.token)
 			setAccessToken(res.data.access_token);
 			sessionStorage.setItem('token', res.data.access_token)
+			setLoading(false)
 			history.push('/dashboard')
 		}
 	}
@@ -34,12 +35,13 @@ function Login(props) {
     }
 	
 	const handleClick = () => {
+		setLoading(true)
 		const data = {
 			username: email,
 			password,
-			// client_secret: "KCTUwZGFHBSYxbU4l0SEz8L7ZaJK5OagXoihAQk6", //secret to put on firebase
-			client_secret: "3PV3uqDwO5iO50d58BS5xjtPuNV0Nj6sSrs7ZzSa", //old local secret
-			client_id: '2', //change to 4 for the public version
+			client_secret: "KCTUwZGFHBSYxbU4l0SEz8L7ZaJK5OagXoihAQk6", //secret to put on firebase
+			// client_secret: "3PV3uqDwO5iO50d58BS5xjtPuNV0Nj6sSrs7ZzSa", //old local secret
+			client_id: '4', //change to 4 for the public version
 			grant_type: 'password',
 			scope: ''
 		};
@@ -65,7 +67,7 @@ function Login(props) {
 
 			<Failure failStatus={failStatus} setFailStatus={setFailStatus}/>
 
-
+			{loading && <Spinner color="danger" />}
 			<div className="form-group row">
 				<label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
 				<div className="col-sm-10">

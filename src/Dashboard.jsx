@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
+import {Alert, Spinner} from 'reactstrap';
+
 
 
 function Dashboard(props) {
@@ -22,7 +24,8 @@ function Dashboard(props) {
     setEditIndex,
     user, setUser,
     setCurrentProject, currentProject,
-    setClicked, clicked
+    setClicked, clicked,
+    setLoading, loading
   } = useContext(AppContext);
 
 
@@ -94,6 +97,8 @@ function Dashboard(props) {
   }
 
   const goToProject = (project) => {
+    setLoading(true)
+
     // setProjectID(id);
     // setProjectName(name);
     // const tempProject = JSON.parse(JSON.stringify(project))

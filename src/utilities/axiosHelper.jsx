@@ -9,9 +9,9 @@ function axiosHelper({
     ff = e => console.log(e),
 
 }) {
-    const API_URL = 'http://localhost:8000' //local url
+    // const API_URL = 'http://localhost:8000' //local url
     //url for firebase
-    // const API_URL = 'https://cors-anywhere.herokuapp.com/https://knit-keeper.herokuapp.com'
+    const API_URL = 'https://cors-anywhere.herokuapp.com/https://knit-keeper.herokuapp.com'
 
 
 

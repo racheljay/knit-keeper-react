@@ -37,21 +37,23 @@ function Login(props) {
 		const data = {
 			username: email,
 			password,
-			client_secret: "3PV3uqDwO5iO50d58BS5xjtPuNV0Nj6sSrs7ZzSa",
-			client_id: '2',
+			// client_secret: "KCTUwZGFHBSYxbU4l0SEz8L7ZaJK5OagXoihAQk6", //secret to put on firebase
+			client_secret: "3PV3uqDwO5iO50d58BS5xjtPuNV0Nj6sSrs7ZzSa", //old local secret
+			client_id: '2', //change to 4 for the public version
 			grant_type: 'password',
 			scope: ''
 		};
 
-		// const headers = {
-        //     'Content_Type': 'application/json;charset=UTF-8',
-        //     'Access-Control-Allow-Origin': '*',
-        //     'Access': 'application/json',
-        // }
+
+		const headers = {
+            'Content_Type': 'application/json;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+            'Access': 'application/json',
+        }
 		
 		const method = 'post';
 		const url = '/v1/oauth/token';
-		axiosHelper({method, url, sf: submit, data, ff: fail})
+		axiosHelper({method, url, sf: submit, data, ff: fail, headers})
 		//check if bearer token is in session storage if it it, then set
 		// setLoginState(true);
 		// console.log('after axios', loginState);

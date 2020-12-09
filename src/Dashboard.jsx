@@ -51,7 +51,8 @@ function Dashboard(props) {
 
   const successfulLogout = (res) => {
 
-    sessionStorage.removeItem('token');
+    // sessionStorage.removeItem('token');
+    sessionStorage.clear();
     history.push('/');
     // setLoginState(false);
     // console.log(loginState);

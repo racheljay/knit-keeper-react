@@ -2,61 +2,68 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
+import {Alert, Spinner} from 'reactstrap';
+
 
 
 function Dashboard(props) {
   const history = useHistory();
 
   const {
-    loginState, setLoginState,
+    // loginState, setLoginState,
     accessToken, setAccessToken,
-    userName, setUserName,
-    userID, setUserID,
-    projectID, setProjectID,
-    setProjectName
+    // userName, setUserName,
+    // userID, setUserID,
+    // projectID, setProjectID,
+    setProjectName,
+    setPatternName,
+    setNeedleSize,
+    setYarn, yarn,
+    setPatternUrl,
+    projectData, setProjectData,
+    setEditIndex,
+    user, setUser,
+    setCurrentProject, currentProject,
+    setClicked, clicked,
+    setLoading, loading
   } = useContext(AppContext);
 
 
-  const [projectData, setProjectData] = useState([]);
-
-  const getUserInfo = (res) => {
-    console.log(res)
-    setUserName(res.data.name);
-    setUserID(res.data.id);
-
-    console.log(res.data.id);
-    const url = `/projects/${res.data.id}`;
-    const headers = {
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    }
-    axiosHelper({ method: 'get', url, sf: showProjects, headers })
-  }
-
-  //did mount
   useEffect(() => {
-    console.log('did mount', loginState)
-    // console.log('bearer', accessToken)
-
-    //conditionally render only if bearer length > 0
+    console.log('project data', projectData)
     const headers = {
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
       'Content_Type': 'application/json;charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
+      'Access': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
     }
-    const method = 'get';
-    const url = '/api/user';
-    axiosHelper({ method, url, sf: getUserInfo, headers })
-  }, [accessToken])
+    if(projectData) {
+
+      axiosHelper({ method: 'get', url: `projects/${user.id}`, headers, sf: showProjects })
+    }
+  }, [projectData])
+
+
 
   const showProjects = (res) => {
-    console.log(res);
-    setProjectData(res.data);
+    console.log('show res', res);
+    setProjectData(res.data.data);
     console.log('project data', res.data)
     console.log('project state', projectData)
   }
 
+  const successfulLogout = (res) => {
+
+    // sessionStorage.removeItem('token');
+    sessionStorage.clear();
+    history.push('/');
+    // setLoginState(false);
+    // console.log(loginState);
+    setAccessToken('')
+    setUser({});
+    // setUserName('');
+    // setUserID(0);
+  }
 
 
   //try looking into revoking the token on the back end
@@ -67,13 +74,7 @@ function Dashboard(props) {
       'Authorization': `Bearer ${accessToken}`,
     }
 
-    axiosHelper({ method: 'get', url, headers })
-    sessionStorage.removeItem('token');
-    history.push('/');
-    setLoginState(false);
-    console.log(loginState);
-    setUserName('');
-    setUserID(0);
+    axiosHelper({ method: 'get', url, headers, sf: successfulLogout })
   }
 
   const addProject = () => {
@@ -81,27 +82,53 @@ function Dashboard(props) {
   }
 
   const deleteUser = () => {
-    console.log('delete', userID)
+    // console.log('delete', userID)
     const method = "delete";
     const url = '/delete-user';
     const data = {
-      "id": JSON.stringify(userID)
+      "id": JSON.stringify(user.id)
     }
     const headers = {
       'Accept': 'application/json',
       'Authorization': `Bearer ${accessToken}`
     }
-
-
-    axiosHelper({ method, url, data, headers });
-    logOut();
+    axiosHelper({ method, url, data, headers, sf: successfulLogout });
+    // successfulLogout();
   }
 
-  const goToProject = (id, name) => {
-    setProjectID(id);
-    setProjectName(name);
+  const goToProject = (project) => {
+    setLoading(true)
+
+    // setProjectID(id);
+    // setProjectName(name);
+    // const tempProject = JSON.parse(JSON.stringify(project))
+    sessionStorage.setItem('currentProject', JSON.stringify(project))
+    setCurrentProject(project)
+    setProjectName(project.project_name)
+    setPatternName(project.pattern_name)
+    setPatternUrl(project.pattern_url)
+    setNeedleSize(project.needle_size)
+    setYarn(project.yarn)
+    console.log('go to project', currentProject)
     history.push('/project')
     // console.log(id);
+  }
+
+  const goToEdit = (project, index) => {
+    // const tempProject = JSON.parse(JSON.stringify(project))
+    // setCurrentProject(previousState => previousState = { ...tempProject })
+    setCurrentProject(project);
+
+    //setting these on this page because state won't cooperate
+    setProjectName(project.project_name)
+    setPatternName(project.pattern_name)
+    setPatternUrl(project.pattern_url)
+    setNeedleSize(project.needle_size)
+    setYarn(project.yarn)
+    console.log('Goto edit', project)
+    // setProjectID(id)
+    setEditIndex(index)
+    history.push('/edit-project')
   }
 
   const deleteProject = (id) => {
@@ -110,14 +137,27 @@ function Dashboard(props) {
     const data = {
       "id": id
     }
-    axiosHelper({ method: 'delete', url, data })
+
+    const successfulDelete = (res) => {
+
+      setProjectData(res.data.data)
+      sessionStorage.setItem('currentProject', JSON.stringify(res.data.data))
+
+    }
+    const headers = {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+    }
+    axiosHelper({ method: 'delete', url, data, headers, sf: successfulDelete })
     // "page refresh" magic stolen from todo list
-    let arr = projectData.filter(item => {
-      if (item.id !== id) {
-        return item;
-      }
-    })
-    setProjectData(arr);
+
+    //Todo: ask Ian how to make better
+    // let arr = projectData.filter(item => {
+    //   if (item.id !== id) {
+    //     return item;
+    //   }
+    // })
+    // setProjectData(arr);
   }
 
   // if (loginState === true) {
@@ -126,7 +166,10 @@ function Dashboard(props) {
     <div className="container">
 
       <h1>Dashboard</h1>
-      <h2>Welcome, {userName}!</h2>
+
+      { user &&
+        <h2>Welcome, {user.name}!</h2>
+      }
 
       <button
         className="btn btn-success"
@@ -148,19 +191,22 @@ function Dashboard(props) {
         projectData.length > 0 ?
 
 
-          projectData.map((item, index) => {
+          projectData.map((project, index) => {
             return (
-              <div className="btn-group" key={index}>
-                <button type="button" className="btn btn-secondary" onClick={() => goToProject(item.id, item.project_name)}>{item.project_name}</button>
-                <button type="button" className="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+              <div className="btn-group btn-block" key={index}>
+                <button type="button" className="btn btn-light btn-lg btn-block" onClick={() => goToProject(project)}>{project.project_name}</button>
+                <button type="button" className="btn btn-light btn-lg dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
                   <span className="sr-only">Toggle Dropdown</span>
                 </button>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                  <a className="dropdown-item" target="_blank" href={item.pattern_url}>Pattern Name: {item.pattern_name}</a>
-                  <a className="dropdown-item" href="#">Needle Size: {item.needle_size}</a>
-                  <a className="dropdown-item" href="#">Yarn: {item.yarn}</a>
+                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuReference">
+                  <a className="dropdown-item" target="_blank" href={project.pattern_url}>Pattern Name: {project.pattern_name}</a>
+                  <a className="dropdown-item" href="#">Needle Size: {project.needle_size}</a>
+                  <a className="dropdown-item" href="#">Yarn: {project.yarn}</a>
                   <div className="dropdown-divider"></div>
-                  <a className="dropdown-item text-danger" onClick={() => deleteProject(item.id)}>Delete Project</a>
+                  <a className="dropdown-item text-success" onClick={() => goToEdit(project, index)}>Edit Details</a>
+                  <div className="dropdown-divider"></div>
+                  <a className="dropdown-item text-danger" onClick={() => deleteProject(project.id)}>Delete Project</a>
+
                 </div>
               </div>
             )

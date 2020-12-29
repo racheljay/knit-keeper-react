@@ -3,36 +3,41 @@ import { useHistory, Link } from 'react-router-dom';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
-function AddProject(props) {
+function AddProject() {
 	let history = useHistory();
 
 const {
-	loginState, setLoginState,
 	accessToken, setAccessToken,
-	userID, setUserID,
-	res, setRes
+	user,
+	// userID, setUserID,
+	res, setRes,
+	projectName, setProjectName,
+    patternName, setPatternName,
+    patternUrl, setPatternUrl,
+    needleSize, setNeedleSize,
+    yarn, setYarn, projectData, setProjectData, setCurrentProject
+
 } = useContext(AppContext);
 
-	const [projectName, setProjectName] = useState('');
-	const [patternName, setPatternName] = useState('');
-	const [patternUrl, setPatternUrl] = useState('');
-	const [needleSize, setNeedleSize] = useState(0);
-	const [yarn, setYarn] = useState('');
-
-
-
-
-// console.log(props.res);
+useEffect(() => {
+	setProjectName('')
+	setPatternName('')
+	setPatternUrl('')
+	setNeedleSize(0)
+	setYarn('')
+}, [])
 
 	const success = (res) => {
 		console.log('in submit', res)
 		setRes(res)
 		if (res.status === 200) {
-			console.log('add project', res)
+			//this is the line that fixed it
+			setProjectData(res.data)
+			console.log('success', res)
 			setTimeout(() => {
 				setRes({})
 				history.push('/dashboard')
-			}, 2000)
+			}, 1500)
 		}
 	}
 
@@ -43,7 +48,7 @@ const {
 
 	const handleClick = () => {
 		const data = {
-			user_id: userID,
+			user_id: user.id,
 			project_name: projectName,
 			pattern_name: patternName,
 			pattern_url: patternUrl,
@@ -61,7 +66,16 @@ const {
 		const method = 'post';
 		const url = `/add-project`;
 		axiosHelper({ method, url, sf: success, data, headers, })
+
+		// projectData.concat(data);
+
 	}
+
+	const backToDash = () => {
+        const obj = {};
+        setCurrentProject(prev => prev = obj)
+        history.push('/dashboard')
+    }
 
 	return (
 		<div className="container">
@@ -71,8 +85,6 @@ const {
 				<Success />
 				: <></>
 			}
-
-
 
 			<div className="form-group">
 				<label htmlFor="exampleFormControlInput1">Project Name</label>
@@ -131,7 +143,7 @@ const {
 				className="btn btn-danger"
 				onClick={handleClick}
 			>Submit</button>
-			<Link to="/dashboard">Back to Dash</Link>
+            <button className="btn btn-link" onClick={backToDash}>Back to Dash</button>
 
 			{/* <div class="form-group">
 				<label for="exampleFormControlTextarea1">Example textarea</label>

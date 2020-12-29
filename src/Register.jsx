@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
-import {Alert} from 'reactstrap';
+import {Alert, Spinner} from 'reactstrap';
 import axiosHelper from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
@@ -8,7 +8,7 @@ import AppContext from './utilities/AppContext';
 function Register(props) {
     let history = useHistory();
 
-    const { setLoginState, loginState, accessToken, setAccessToken } = useContext(AppContext);
+    const {  accessToken, setAccessToken } = useContext(AppContext);
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -16,6 +16,8 @@ function Register(props) {
     // const [accessToken, setAccessToken] = useState('')
 
     const [failStatus, setFailStatus] = useState(false);
+    const [loading, setLoading] = useState(false);
+
 
 
     const submit = (res) => {
@@ -24,6 +26,7 @@ function Register(props) {
             // console.log(res.data.message, res.data.data.token)
             setAccessToken(res.data.data.token);
             sessionStorage.setItem('token', res.data.data.token)
+            setLoading(false)
             history.push('/dashboard');
         }
     }
@@ -36,6 +39,7 @@ function Register(props) {
 
     const handleClick = () => {
         // setFailStatus(false)
+        setLoading(true)
         const data = { name, email, password };
 
         const headers = {
@@ -47,8 +51,8 @@ function Register(props) {
         const method = 'post';
         const url = '/register';
         axiosHelper({ method, url, sf: submit, data, headers, ff: fail })
-        setLoginState(true);
-        console.log(loginState)
+        // setLoginState(true);
+        // console.log(loginState)
     }
 
 
@@ -56,9 +60,8 @@ function Register(props) {
         <div className="container">
             <h1>New Account:</h1>
 
-            {/* {failStatus && */}
                 <Failure failStatus={failStatus} setFailStatus={setFailStatus}/>
-            {/* } */}
+                {loading && <Spinner color="danger" />}
 
             <div className="form-group row">
                 <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">User Name</label>
@@ -117,18 +120,6 @@ function Register(props) {
 
 export default Register;
 
-// const Failure = () => {
-//     const { setFailStatus } = useContext(AppContext);
-
-//     return (
-//         <div className="alert alert-danger alert-dismissible fade show alert-fail" role="alert">
-//             <strong>Oops!</strong> This email is taken, or invalid. Try again!
-//             <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={() => $('.alert-fail').alert('close')}>
-//                 <span aria-hidden="true">&times;</span>
-//             </button>
-//         </div>
-//     )
-// }
 
 const Failure = ({failStatus, setFailStatus}) => {
     // const [visible, setVisible] = useState(true);

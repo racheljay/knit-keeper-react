@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
+import {Alert, Spinner} from 'reactstrap';
 import  axiosHelper  from './utilities/axiosHelper';
 import AppContext from './utilities/AppContext';
 
@@ -11,11 +12,10 @@ function Login(props) {
 
 	let history = useHistory();
 
-	const { setLoginState,loginState, accessToken, setAccessToken } = useContext(AppContext);
+	const { accessToken, setAccessToken, loading, setLoading } = useContext(AppContext);
+	const [failStatus, setFailStatus] = useState(false);
 
-	useEffect(() => {
-		console.log('did mount', loginState)
-	}, [])
+
 //submit method used in axios call
 	const submit = (res) => {
 		if (res.status === 200) {
@@ -23,38 +23,51 @@ function Login(props) {
 			// console.log(res.data.message, res.data.data.token)
 			setAccessToken(res.data.access_token);
 			sessionStorage.setItem('token', res.data.access_token)
+			setLoading(false)
 			history.push('/dashboard')
 		}
 	}
+
+	const fail = (e) => {
+        console.log(e)
+        setFailStatus(true)
+        // $('.alert-fail').alert()
+    }
 	
 	const handleClick = () => {
+		setLoading(true)
 		const data = {
 			username: email,
 			password,
-			client_secret: "3PV3uqDwO5iO50d58BS5xjtPuNV0Nj6sSrs7ZzSa",
-			client_id: '2',
+			client_secret: "KCTUwZGFHBSYxbU4l0SEz8L7ZaJK5OagXoihAQk6", //secret to put on firebase
+			// client_secret: "3PV3uqDwO5iO50d58BS5xjtPuNV0Nj6sSrs7ZzSa", //old local secret
+			client_id: '4', //change to 4 for the public version
 			grant_type: 'password',
 			scope: ''
 		};
 
-		// const headers = {
-        //     'Content_Type': 'application/json;charset=UTF-8',
-        //     'Access-Control-Allow-Origin': '*',
-        //     'Access': 'application/json',
-        // }
+
+		const headers = {
+            'Content_Type': 'application/json;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+            'Access': 'application/json',
+        }
 		
 		const method = 'post';
 		const url = '/v1/oauth/token';
-		axiosHelper({method, url, sf: submit, data})
+		axiosHelper({method, url, sf: submit, data, ff: fail, headers})
 		//check if bearer token is in session storage if it it, then set
-		setLoginState(true);
-		console.log('after axios', loginState);
+		// setLoginState(true);
+		// console.log('after axios', loginState);
 	}
 
 	return (
 		<div className="container">
 			<h1>Login:</h1>
 
+			<Failure failStatus={failStatus} setFailStatus={setFailStatus}/>
+
+			{loading && <Spinner color="danger" />}
 			<div className="form-group row">
 				<label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
 				<div className="col-sm-10">
@@ -98,3 +111,15 @@ function Login(props) {
 }
 
 export default Login;
+
+const Failure = ({failStatus, setFailStatus}) => {
+    // const [visible, setVisible] = useState(true);
+  
+    const onDismiss = () => setFailStatus(false);
+  
+    return (
+      <Alert color="danger" isOpen={failStatus} toggle={onDismiss} fade={true}>
+        Username or password is incorrect
+      </Alert>
+    );
+  }

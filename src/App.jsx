@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect, useHistory, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import Nav from './Nav';
 import Register from './Register';
 import Login from './Login';
@@ -9,9 +9,7 @@ import Project from './Project';
 import SubProject from './SubProject';
 import EditProject from './EditProject';
 import { AppProvider } from './utilities/AppContext';
-import AppContext from './utilities/AppContext';
 import axiosHelper from './utilities/axiosHelper';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 

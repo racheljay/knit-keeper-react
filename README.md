@@ -1,7 +1,11 @@
 # Knit Keeper
 
+Project hosted [here](https://knit-keeper-30b32.web.app/)
+
+[Backend Repo](https://github.com/racheljay/knit-keeper-laravel)
+
 ## Introduction/ Background:
-Knit Keeper is a website for knitters to keep track of knitting projects. They will be able to keep an organized collection of different types of projects and be able to view and update details within each project. It has a React front end and a Laravel back end.
+Knit Keeper is a full stack web application that implements user authentication and CRUD functionality. It is built with a React front end and a Laravel/ Lumen back end.
 
 ## Features:
 - User authentication and login
